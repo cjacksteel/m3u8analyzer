@@ -18,7 +18,7 @@ public class AnalyzerService {
 		    String line = br.readLine();
 
 		    while (line != null) {
-		    	if(line.startsWith("http://")){
+		    	if(line.startsWith("ftp://") || line.startsWith("http://")){
 			    	sb.append(line);
 			        sb.append(System.lineSeparator());
 			    }

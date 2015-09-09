@@ -14,6 +14,10 @@ import org.apache.commons.lang3.StringUtils;
 
 public class FileFetcher {
 	
+	public FileFetcher(){
+		
+	}
+	
 	//get the master m3u8 file and store it in the m3u8 files directory of the project
 	public void downloadMasterFile(URL website) throws IOException{
 		String fileName = null;
@@ -21,7 +25,7 @@ public class FileFetcher {
 		
 		ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 				
-		File outputDirectory = new File("m3u8 files/" + website.toString().replaceAll("[-+.^:,/]","_") );
+		File outputDirectory = new File("m3u8 files/" + website.toString().replaceAll("[-+.^:,/]","_"));
 		if (!outputDirectory.exists()) {
 			if (outputDirectory.mkdir()) {
 				System.out.println("Directory " + outputDirectory + " is created!");
