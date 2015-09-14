@@ -1,18 +1,19 @@
 package m3u8analyzer;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
 
-public class AnalyzerService {
-
-	public static void main(String[] args) throws IOException {
+public class ConfReader {
+	
+	public ConfReader(){
+	}
+	
+	public String readConf(String path) throws IOException
+	{
 		String address;
-		
 		//read in conf file with the address
-		BufferedReader br = new BufferedReader(new FileReader("conf/address.conf"));
+		BufferedReader br = new BufferedReader(new FileReader(path));
 		try {
 		    StringBuilder sb = new StringBuilder();
 		    String line = br.readLine();
@@ -29,13 +30,6 @@ public class AnalyzerService {
 		    br.close();
 		}
 		
-		System.out.println(address);
-		URL website = new URL(address);
-		
-		FileFetcher ff = new FileFetcher();
-		ff.downloadMasterFile(website);
-		
-		File masterFile = new File(ff.getMasterFileLocation(website));
-		ff.downloadChildFiles(website, masterFile);
+		return address;
 	}
 }

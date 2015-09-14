@@ -13,13 +13,14 @@ import java.nio.channels.ReadableByteChannel;
 import org.apache.commons.lang3.StringUtils;
 
 public class FileFetcher {
+	private URL website;
 	
-	public FileFetcher(){
-		
+	public FileFetcher(URL url){
+		website = url;
 	}
 	
 	//get the master m3u8 file and store it in the m3u8 files directory of the project
-	public void downloadMasterFile(URL website) throws IOException{
+	public void downloadMasterFile() throws IOException{
 		String fileName = null;
 		FileOutputStream fos = null;
 		
@@ -45,7 +46,7 @@ public class FileFetcher {
 	}
 	
 	//take in a master file and download child m3u8 files
-	public void downloadChildFiles(URL website, File masterFile) throws IOException{
+	public void downloadChildFiles(File masterFile) throws IOException{
 		URL childAddress;
  	   	String line;
  	   	String urlDifference;
@@ -102,7 +103,7 @@ public class FileFetcher {
 		}
 	}
 	
-	public String getMasterFileLocation(URL website){
+	public String getMasterFileLocation(){
 		String path = "m3u8 files/" + website.toString().replaceAll("[-+.^:,/]","_") + "/" + website.toString().substring(website.toString().lastIndexOf('/') + 1);
 		File f = new File(path);
 		if(f.exists() && !f.isDirectory()) {
@@ -111,5 +112,17 @@ public class FileFetcher {
 		else{
 			return "File does not exist!";
 		}
+	}
+	
+	public String toString(){
+		return website.toString();
+	}
+	
+	public URL getURL(){
+		return website;
+	}
+	
+	public String getRootDirectory(){
+		return "m3u8 files/" + website.toString().replaceAll("[-+.^:,/]","_") + "/";
 	}
 }
