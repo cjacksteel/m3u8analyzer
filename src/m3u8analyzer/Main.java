@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class Analyzer {
+public class Main {
 
 	public static void main(String[] args) throws MalformedURLException, IOException {
 		//Read in the conf file and determine what the URL is
@@ -20,7 +20,7 @@ public class Analyzer {
 
 		//System.out.println(ff.getRootDirectory());
 		
-		Parser p = new Parser(ff.getRootDirectory());
-		p.parse();
+		FileParser p = new FileParser();
+		p.parse(p.getFileArray(ff.getRootDirectory()));
 	}
 }
