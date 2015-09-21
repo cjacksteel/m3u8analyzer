@@ -14,10 +14,10 @@ public class Main {
 
 		//Get the files from the specified URL
 		FileFetcher ff = new FileFetcher(website);
-		ff.downloadMasterFile();
+		/*ff.downloadMasterFile();
 		File masterFile = new File(ff.getMasterFileLocation());
 		ff.downloadChildFiles(masterFile);
-
+*/
 		//System.out.println(ff.getRootDirectory());
 		
 		FileParser p = new FileParser();
