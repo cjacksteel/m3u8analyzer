@@ -12,6 +12,9 @@ public class Main {
 		ConfReader configFile = new ConfReader();
 		URL website = new URL(configFile.readConf("conf/address.conf"));
 
+		//Make the log file name dynamic based on the passed URL
+		System.setProperty("logfilename", website.toString().replaceAll("[-+.^:,/]","_"));
+		
 		//Get the files from the specified URL
 		FileFetcher ff = new FileFetcher(website);
 		/*ff.downloadMasterFile();

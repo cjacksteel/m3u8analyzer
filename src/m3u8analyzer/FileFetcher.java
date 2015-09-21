@@ -11,12 +11,15 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 public class FileFetcher {
 	private URL website;
+	private static Logger logger;
 	
 	public FileFetcher(URL url){
 		website = url;
+		logger=Logger.getLogger(url.toString());
 	}
 	
 	//get the master m3u8 file and store it in the m3u8 files directory of the project
@@ -39,8 +42,7 @@ public class FileFetcher {
 			fileName = outputDirectory + "/" + website.toString().substring(website.toString().lastIndexOf('/') + 1);
 			fos = new FileOutputStream(fileName);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e);
 		}
 		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 	}
@@ -93,8 +95,7 @@ public class FileFetcher {
 		   				fileName = outputDirectory + "/" + childAddress.toString().substring(childAddress.toString().lastIndexOf('/') + 1);
 		   				fos = new FileOutputStream(fileName);
 		   			} catch (FileNotFoundException e) {
-		   			// TODO Auto-generated catch block
-		   				e.printStackTrace();
+		   				logger.error(e);
 		   			}
 		   			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
   
