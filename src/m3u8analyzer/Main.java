@@ -17,10 +17,10 @@ public class Main {
 		
 		//Get the files from the specified URL
 		FileFetcher ff = new FileFetcher(website);
-		/*ff.downloadMasterFile();
+		ff.downloadMasterFile();
 		File masterFile = new File(ff.getMasterFileLocation());
 		ff.downloadChildFiles(masterFile);
-		*/
+		
 		//Create a parser that will parse each file and apply analysis
 		FileParser p = new FileParser();
 		p.parse(p.getFileArray(ff.getRootDirectory()));

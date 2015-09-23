@@ -2,7 +2,6 @@ package m3u8analyzer;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import org.apache.log4j.Logger;
 import java.io.FileReader;
 import java.io.IOException;
@@ -53,7 +52,8 @@ public class FileAnalyzer {
 		}
 		if(tags.size() > 1)
 		{
-			logger.error("Contains " + tags.size() + " " + tagName + " tags at lines " + tags.toString());
+			logger.error("Lines " + tags.toString() + " Contains " + tags.size() + " " + tagName + 
+					" tags. Each file may only contain 1 " + tagName + " tag");
 		}
 	}
 	public void checkDurationsAgainstTarget() throws IOException{
@@ -65,7 +65,19 @@ public class FileAnalyzer {
 			lineText = content.get(i);
 			//get the target duration of the file
 			if(lineText.startsWith("#EXT-X-TARGETDURATION")){
-				targetDuration = Integer.parseInt((lineText.substring(lineText.indexOf(":") + 1)));
+				try{
+					targetDuration = Integer.parseInt((lineText.substring(lineText.indexOf(":") + 1)));
+				}
+				catch(NumberFormatException e){
+					logger.error("Line " + (i+1) + " " + e + ". #EXT-X-TARGETDURATION must be an Integer.");
+					try{
+						targetDuration = Math.round(Float.parseFloat((lineText.substring(lineText.indexOf(":") + 1))));
+					}
+					catch(NumberFormatException n)
+					{
+						break;
+					}
+				}
 			}
 			else if(lineText.startsWith("#EXTINF:")){
 				if(targetDuration == -1){
@@ -73,7 +85,9 @@ public class FileAnalyzer {
 					break;
 				}
 				else if(targetDuration < Float.parseFloat((lineText.substring(lineText.indexOf(":") + 1, lineText.indexOf(","))))){
-					logger.error("Line " + (i+1) + " specifies duration of " +  Float.parseFloat((lineText.substring(lineText.indexOf(":") + 1, lineText.indexOf(",")))) + " but target duration is " + targetDuration);
+					logger.error("Line " + (i+1) + " specifies duration of " +  
+							Float.parseFloat((lineText.substring(lineText.indexOf(":") + 1, lineText.indexOf(",")))) + 
+							" but target duration is " + targetDuration + ". File duration may not exceed target.");
 				}		
 			}
 		}

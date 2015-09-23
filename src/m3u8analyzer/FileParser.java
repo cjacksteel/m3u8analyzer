@@ -27,9 +27,8 @@ public class FileParser {
 	            a.checkForMultipleTags("#EXT-X-TARGETDURATION");
 	            a.checkForMultipleTags("#EXT-X-INDEPENDENT-SEGMENTS");
 	            a.checkForMultipleTags("#EXT-X-START");
+	            a.checkForMultipleTags("#EXT-X-VERSION");
 	            a.checkDurationsAgainstTarget();
-	            //close to free up resources
-	            //a.closeBufferedReader();
 	        }
 	    }
 	}
