@@ -23,9 +23,13 @@ public class FileParser {
 	        	//instantiate the analyzer for this file
 	        	FileAnalyzer a = new FileAnalyzer(file);
 	            a.checkFirstLineForTag();
-	            a.checkForMultipleVersionTags();
-	            //close it to free up resources
-	            a.closeBufferedReader();
+	            a.checkForMultipleTags("#EXTM3U");
+	            a.checkForMultipleTags("#EXT-X-TARGETDURATION");
+	            a.checkForMultipleTags("#EXT-X-INDEPENDENT-SEGMENTS");
+	            a.checkForMultipleTags("#EXT-X-START");
+	            a.checkDurationsAgainstTarget();
+	            //close to free up resources
+	            //a.closeBufferedReader();
 	        }
 	    }
 	}

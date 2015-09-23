@@ -20,9 +20,8 @@ public class Main {
 		/*ff.downloadMasterFile();
 		File masterFile = new File(ff.getMasterFileLocation());
 		ff.downloadChildFiles(masterFile);
-*/
-		//System.out.println(ff.getRootDirectory());
-		
+		*/
+		//Create a parser that will parse each file and apply analysis
 		FileParser p = new FileParser();
 		p.parse(p.getFileArray(ff.getRootDirectory()));
 	}
