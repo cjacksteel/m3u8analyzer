@@ -1,28 +1,28 @@
 package m3u8analyzer;
 
+import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.swing.JFrame;
+
 public class Main {
 
 	public static void main(String[] args) throws MalformedURLException, IOException {
-		//Read in the conf file and determine what the URL is
-		ConfReader configFile = new ConfReader();
-		URL website = new URL(configFile.readConf("conf/address.conf"));
-
-		//Make the log file name dynamic based on the passed URL
-		System.setProperty("logfilename", website.toString().replaceAll("[-+.^:,/]","_"));
+		//Call the UI to appear
+		EventQueue.invokeLater(new Runnable() {
+		        
+	            @Override
+	            public void run() {
+	                UserInterface ui = new UserInterface();
+	                ui.setVisible(true);
+	            }
+	        });
 		
-		//Get the files from the specified URL
-		FileFetcher ff = new FileFetcher(website);
-		/*ff.downloadMasterFile();
-		File masterFile = new File(ff.getMasterFileLocation());
-		ff.downloadChildFiles(masterFile);
-		*/
-		//Create a parser that will parse each file and apply analysis
-		FileParser p = new FileParser();
-		p.parse(p.getFileArray(ff.getRootDirectory()));
+		//Read in the conf file and determine what the URL is
+		//ConfReader configFile = new ConfReader();
+		//URL website = new URL(configFile.readConf("conf/address.conf"));
 	}
 }
