@@ -28,8 +28,7 @@ public class ConfReader {
 		    	address = sb.toString();
 		} finally {
 		    br.close();
-		}
-		
+		}	
 		return address;
 	}
 }

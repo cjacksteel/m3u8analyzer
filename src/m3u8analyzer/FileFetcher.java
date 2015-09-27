@@ -19,7 +19,7 @@ public class FileFetcher {
 	
 	public FileFetcher(URL url){
 		website = url;
-		logger=Logger.getLogger(url.toString());
+		logger=Logger.getLogger("File Structure");
 	}
 	
 	//get the master m3u8 file and store it in the m3u8 files directory of the project
@@ -58,7 +58,7 @@ public class FileFetcher {
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(masterFile))) {
 		    while ((line = br.readLine()) != null) {
-		       if(line.startsWith("#")){
+		       if(line.startsWith("#") || line.equals("")){
 		    	   //do nothing
 		       }
 		       else{
@@ -89,15 +89,23 @@ public class FileFetcher {
 		    		   outputDirectory = new File("m3u8 files/" + website.toString().replaceAll("[-+.^:,/]","_") );
 		    	   }
 		    	   
-		    	   ReadableByteChannel rbc = Channels.newChannel(childAddress.openStream());
+		    	   ReadableByteChannel rbc = null; 
 		    	   
 		    	   try {
-		   				fileName = outputDirectory + "/" + childAddress.toString().substring(childAddress.toString().lastIndexOf('/') + 1);
+		    		    rbc = Channels.newChannel(childAddress.openStream());
+				    	fileName = outputDirectory + "/" + childAddress.toString().substring(childAddress.toString().lastIndexOf('/') + 1);
 		   				fos = new FileOutputStream(fileName);
 		   			} catch (FileNotFoundException e) {
 		   				logger.error(e);
 		   			}
-		   			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+		    	   
+		    	   if (rbc == null)
+		    	   {
+		    		   //skip the file
+		    	   }
+		    	   else{
+			   			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);   
+		    	   }
   
 		       }
 		    }
