@@ -86,7 +86,8 @@ public class UserInterface extends JFrame {
 		String columns[] = {"Error No.", "Error Type", "File Name", "Line No.", "Error Details"};
 		String dataValues[][] =
 			{
-				{ "12432", "ERROR", "67", "Test", "Test" },
+				{"2015-09-28 17:49:24,283","File Structure","ERROR","N/A","java.io.FileNotFoundException: http://146.186.90.203:8080/Arris/ipadipad-ultralow.m3u8"},
+				{"2015-09-28 17:49:24,440","m3u8 files\\http___146_186_90_203_8080_Arris_ipad_m3u8\\ipadipad-high.m3u8","ERROR","[2, 3]","Contains 2 #EXT-X-VERSION tags. Each file may only contain 1 #EXT-X-VERSION tag"}
 			};
 		
 		table = new JTable(dataValues, columns);
