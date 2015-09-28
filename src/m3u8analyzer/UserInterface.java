@@ -1,32 +1,29 @@
 package m3u8analyzer;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-
 import java.awt.BorderLayout;
-
-import javax.swing.JButton;
-
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
-import net.miginfocom.swing.MigLayout;
-
-import javax.swing.JMenuBar;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 
 public class UserInterface extends JFrame {
 	public JTextField textField;
+	private JTable table;
+	private JPanel panel;
+	private JScrollPane scrollPane;
 	
 	public UserInterface() {
 		setTitle("Cory's m3u8analyzer");
@@ -34,6 +31,8 @@ public class UserInterface extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);		
 		
+        panel = new JPanel();
+        
 		JButton btnExit = new JButton("Exit");
 		btnExit.setBounds(412, 632, 200, 40);
 		btnExit.addActionListener(new ActionListener() {
@@ -41,16 +40,18 @@ public class UserInterface extends JFrame {
 				System.exit(0);
 			}
 		});
-		getContentPane().setLayout(null);
-		getContentPane().add(btnExit);
+		panel.setLayout(null);
+		getContentPane().add(panel);
+		
+		panel.add(btnExit);
 		
 		JLabel lblEnterUrlOf = new JLabel("Enter URL of Master HLS File:");
 		lblEnterUrlOf.setBounds(12, 13, 175, 16);
-		getContentPane().add(lblEnterUrlOf);
+		panel.add(lblEnterUrlOf);
 		
 		textField = new JTextField();
 		textField.setBounds(185, 10, 809, 22);
-		getContentPane().add(textField);
+		panel.add(textField);
 		textField.setColumns(10);
 		
 		JButton btnProcessFile = new JButton("Process File");
@@ -80,7 +81,29 @@ public class UserInterface extends JFrame {
 			}
 		});
 		btnProcessFile.setBounds(185, 42, 133, 25);
-		getContentPane().add(btnProcessFile);
+		panel.add(btnProcessFile);
+		
+		String columns[] = {"Error No.", "Error Type", "File Name", "Line No.", "Error Details"};
+		String dataValues[][] =
+			{
+				{ "12432", "ERROR", "67", "Test", "Test" },
+			};
+		
+		table = new JTable(dataValues, columns);
+		//Define column widths
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		table.getColumnModel().getColumn(0).setPreferredWidth(60);
+		table.getColumnModel().getColumn(1).setPreferredWidth(65);
+		table.getColumnModel().getColumn(2).setPreferredWidth(300);
+		table.getColumnModel().getColumn(3).setPreferredWidth(60);
+		table.getColumnModel().getColumn(4).setPreferredWidth(496);
+		//Enable clicking on the headers to sort columns		
+		table.setAutoCreateRowSorter(true);
+		
+		scrollPane = new JScrollPane(table);
+		scrollPane.setBounds(10, 89, 984, 532);
+		panel.add(scrollPane, BorderLayout.CENTER);
+
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
