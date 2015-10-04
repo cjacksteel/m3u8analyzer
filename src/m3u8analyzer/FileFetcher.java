@@ -19,7 +19,7 @@ public class FileFetcher {
 	
 	public FileFetcher(URL url){
 		website = url;
-		logger=Logger.getLogger("File Structure");
+		logger=Logger.getLogger(url.toString());
 	}
 	
 	//get the master m3u8 file and store it in the m3u8 files directory of the project
@@ -57,11 +57,13 @@ public class FileFetcher {
 		File outputDirectory;
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(masterFile))) {
+			int lineCount = 0;
 		    while ((line = br.readLine()) != null) {
 		       if(line.startsWith("#") || line.equals("")){
-		    	   //do nothing
+		    	   lineCount++;
 		       }
 		       else{
+		    	   lineCount++;
 		    	   //if the file is using full URL just use the line
 		    	   if(line.startsWith("http://")){
 		    		   childAddress = new URL(line);
@@ -96,7 +98,7 @@ public class FileFetcher {
 				    	fileName = outputDirectory + "/" + childAddress.toString().substring(childAddress.toString().lastIndexOf('/') + 1);
 		   				fos = new FileOutputStream(fileName);
 		   			} catch (FileNotFoundException e) {
-		   				logger.error(e);
+		   				logger.error(lineCount + "`" + e);
 		   			}
 		    	   
 		    	   if (rbc == null)

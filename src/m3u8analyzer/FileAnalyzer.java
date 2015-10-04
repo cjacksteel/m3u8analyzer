@@ -24,7 +24,6 @@ public class FileAnalyzer {
 		br.close();
 	}
 
-	
 	public void checkFirstLineForTag() throws IOException{
 		String firstLine = content.get(0);
 		
@@ -33,7 +32,7 @@ public class FileAnalyzer {
 		}
 		//Any other first line of the file is a problem according to HLS spec
 		else{
-			logger.error("Incorrect first line. Expected #EXTM3U but found " + firstLine);
+			logger.error("1`Incorrect first line. Expected #EXTM3U but found " + firstLine);
 		}
 	}
 	
@@ -52,7 +51,7 @@ public class FileAnalyzer {
 		}
 		if(tags.size() > 1)
 		{
-			logger.error("Lines " + tags.toString() + " Contains " + tags.size() + " " + tagName + 
+			logger.error(tags.toString() + "`Contains " + tags.size() + " " + tagName + 
 					" tags. Each file may only contain 1 " + tagName + " tag");
 		}
 	}
@@ -69,7 +68,7 @@ public class FileAnalyzer {
 					targetDuration = Integer.parseInt((lineText.substring(lineText.indexOf(":") + 1)));
 				}
 				catch(NumberFormatException e){
-					logger.error("Line " + (i+1) + " " + e + ". #EXT-X-TARGETDURATION must be an Integer.");
+					logger.error((i+1) + "`#EXT-X-TARGETDURATION must be an Integer.");
 					try{
 						targetDuration = Math.round(Float.parseFloat((lineText.substring(lineText.indexOf(":") + 1))));
 					}
@@ -81,11 +80,11 @@ public class FileAnalyzer {
 			}
 			else if(lineText.startsWith("#EXTINF:")){
 				if(targetDuration == -1){
-					logger.error("No target duration specified!");
+					logger.error("No target duration specified!`N/A");
 					break;
 				}
 				else if(targetDuration < Float.parseFloat((lineText.substring(lineText.indexOf(":") + 1, lineText.indexOf(","))))){
-					logger.error("Line " + (i+1) + " specifies duration of " +  
+					logger.error((i+1) + "`Line specifies duration of " +  
 							Float.parseFloat((lineText.substring(lineText.indexOf(":") + 1, lineText.indexOf(",")))) + 
 							" but target duration is " + targetDuration + ". File duration may not exceed target.");
 				}		

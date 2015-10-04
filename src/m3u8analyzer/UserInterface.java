@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 
 public class UserInterface extends JFrame {
@@ -24,7 +24,7 @@ public class UserInterface extends JFrame {
 	private JTable table;
 	private JPanel panel;
 	private JScrollPane scrollPane;
-	
+
 	public UserInterface() {
 		setTitle("Cory's m3u8analyzer");
         setSize(1024, 768);
@@ -73,6 +73,9 @@ public class UserInterface extends JFrame {
 						//Create a parser that will parse each file and apply analysis
 						FileParser p = new FileParser();
 						p.parse(p.getFileArray(ff.getRootDirectory()));
+						
+						LogReader lr = new LogReader(table);
+						lr.readLog(p.getLogfile());
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						JOptionPane.showMessageDialog(null, "Malformed URL.\nURL must be in the format http://www.example.com/hls-master-file.m3u8",
@@ -84,13 +87,8 @@ public class UserInterface extends JFrame {
 		panel.add(btnProcessFile);
 		
 		String columns[] = {"Error No.", "Error Type", "File Name", "Line No.", "Error Details"};
-		String dataValues[][] =
-			{
-				{"2015-09-28 17:49:24,283","File Structure","ERROR","N/A","java.io.FileNotFoundException: http://146.186.90.203:8080/Arris/ipadipad-ultralow.m3u8"},
-				{"2015-09-28 17:49:24,440","m3u8 files\\http___146_186_90_203_8080_Arris_ipad_m3u8\\ipadipad-high.m3u8","ERROR","[2, 3]","Contains 2 #EXT-X-VERSION tags. Each file may only contain 1 #EXT-X-VERSION tag"}
-			};
-		
-		table = new JTable(dataValues, columns);
+		DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
+		table = new JTable(tableModel);
 		//Define column widths
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.getColumnModel().getColumn(0).setPreferredWidth(60);
@@ -105,7 +103,6 @@ public class UserInterface extends JFrame {
 		scrollPane.setBounds(10, 89, 984, 532);
 		panel.add(scrollPane, BorderLayout.CENTER);
 
-		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
@@ -120,4 +117,9 @@ public class UserInterface extends JFrame {
 		});
 		mnFile.add(mntmExit);
 	}
-}
+	
+	public void insertRow(Object[] obj){
+		DefaultTableModel y =(DefaultTableModel)table.getModel(); 
+        y.addRow(obj); 
+	}
+}		
