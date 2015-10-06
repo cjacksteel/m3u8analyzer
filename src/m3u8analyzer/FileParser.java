@@ -36,6 +36,7 @@ public class FileParser {
 	            a.checkForMultipleTags("#EXT-X-START");
 	            a.checkForMultipleTags("#EXT-X-VERSION");
 	            a.checkDurationsAgainstTarget();
+	            //a.checkForInvalidTags();
 	        }      
 	    }
 	}

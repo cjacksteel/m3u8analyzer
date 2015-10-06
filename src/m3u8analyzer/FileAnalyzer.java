@@ -2,7 +2,10 @@ package m3u8analyzer;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+
 import org.apache.log4j.Logger;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,10 +14,11 @@ public class FileAnalyzer {
 
 	private static Logger logger;
 	ArrayList<String> content = new ArrayList<String>();
+	ArrayList<String> validTags = new ArrayList<String>();
 
 	public FileAnalyzer(File aFile) throws IOException{
 		File file = aFile;
-		logger=Logger.getLogger(file.toString());
+		logger=Logger.getLogger(file.toString().substring(file.toString().lastIndexOf("\\") + 1));
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String lineText;
 		//add all lines of file into an arraylist
@@ -22,6 +26,18 @@ public class FileAnalyzer {
 			content.add(lineText);
 		}
 		br.close();
+		
+		//Create Arraylist of all valid tags from conf file
+		BufferedReader br2 = new BufferedReader(new FileReader("conf/validtags.conf"));
+		String line = br2.readLine();
+		while (line != null) {
+			if (line.startsWith("#")){
+				validTags.add(line);
+			}
+			line = br2.readLine();
+		}
+
+		br2.close();
 	}
 
 	public void checkFirstLineForTag() throws IOException{
@@ -91,4 +107,23 @@ public class FileAnalyzer {
 			}
 		}
 	}
+	
+	public void checkForInvalidTags() throws IOException{
+		String lineText;
+		String [] tagText;
+		for (int i=0; i < content.size(); i++){
+			//check if the row contains a tag
+			lineText = content.get(i);
+			if(lineText.startsWith("#EXT")){
+				tagText = lineText.split("\\W+");
+				if(validTags.contains(tagText[1])){
+					System.out.println("Contains.");
+				}
+				else{
+					System.out.println("Contains." + tagText[1]);
+					logger.error("Invalid tag. Tag "  + " is not valid per HLS spec.");
+				}
+			}
+		}	
+	}	
 }
