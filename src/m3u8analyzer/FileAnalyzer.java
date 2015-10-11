@@ -48,14 +48,14 @@ public class FileAnalyzer {
 		for(String line: content){
 			if (type == "Master"){
 				if(line.contains("#EXTINF")){
-					logger.error("N/A`Unable to determine file type. File contains both master and playlist tags.");
+					logger.fatal("N/A`Unable to determine file type. File contains both master and playlist tags.");
 					type = "Unknown";
 					break;
 				}
 			}
 			if (type == "Playlist"){
 				if(line.contains("#EXT-X-STREAM-INF")){
-					logger.error("N/A`Unable to determine file type. File contains both master and playlist tags.");
+					logger.fatal("N/A`Unable to determine file type. File contains both master and playlist tags.");
 					type = "Unknown";
 					break;
 				}
@@ -78,7 +78,7 @@ public class FileAnalyzer {
 		}
 		//Any other first line of the file is a problem according to HLS spec
 		else{
-			logger.error("1`Incorrect first line. Expected #EXTM3U but found " + firstLine);
+			logger.fatal("1`Incorrect first line. Expected #EXTM3U but found " + firstLine);
 		}
 	}
 	
@@ -163,7 +163,7 @@ public class FileAnalyzer {
 						duration = Integer.parseInt((lineText.substring(lineText.indexOf(":") + 1, lineText.indexOf(","))));
 						if(duration != -1)
 						{	
-							logger.error((i+1) + "`File specifies version " + version + ". All durations should be floating point in this version, but found integer.");
+							logger.warn((i+1) + "`File specifies version " + version + ". All durations should be floating point in this version, but found integer.");
 						}
 					}
 					catch(NumberFormatException e){

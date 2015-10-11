@@ -32,7 +32,6 @@ public class FileFetcher {
 		File outputDirectory = new File("m3u8 files/" + website.toString().replaceAll("[-+.^:,/]","_"));
 		if (!outputDirectory.exists()) {
 			if (outputDirectory.mkdir()) {
-				System.out.println("Directory " + outputDirectory + " is created!");
 			} else {
 				System.out.println("Failed to create directory!");
 			}
@@ -42,7 +41,7 @@ public class FileFetcher {
 			fileName = outputDirectory + "/" + website.toString().substring(website.toString().lastIndexOf('/') + 1);
 			fos = new FileOutputStream(fileName);
 		} catch (FileNotFoundException e) {
-			logger.error(e);
+			logger.fatal(e);
 		}
 		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 	}
@@ -81,7 +80,6 @@ public class FileFetcher {
 		    		   outputDirectory = new File("m3u8 files/" + website.toString().replaceAll("[-+.^:,/]","_") + "/" + urlDifference.substring(0, urlDifference.lastIndexOf("/") + 1));
 		    			if (!outputDirectory.exists()) {
 		    				if (outputDirectory.mkdir()) {
-		    					System.out.println("Directory " + outputDirectory + " is created!");
 		    				} else {
 		    					System.out.println("Failed to create directory!");
 		    				}
@@ -98,7 +96,7 @@ public class FileFetcher {
 				    	fileName = outputDirectory + "/" + childAddress.toString().substring(childAddress.toString().lastIndexOf('/') + 1);
 		   				fos = new FileOutputStream(fileName);
 		   			} catch (FileNotFoundException e) {
-		   				logger.error(lineCount + "`" + e);
+		   				logger.fatal(lineCount + "`" + e);
 		   			}
 		    	   
 		    	   if (rbc == null)

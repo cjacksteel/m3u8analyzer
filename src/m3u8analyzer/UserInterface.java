@@ -87,7 +87,7 @@ public class UserInterface extends JFrame {
 		btnProcessFile.setBounds(185, 42, 133, 25);
 		panel.add(btnProcessFile);
 		
-		String columns[] = {"Error No.", "Error Type", "File Name", "Line No.", "Error Details"};
+		String columns[] = {"Error No.", "Severity", "File Name", "Line No.", "Error Details"};
 		DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
 		table = new JTable(tableModel);
 		//Define column widths

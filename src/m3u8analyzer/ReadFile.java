@@ -22,11 +22,14 @@ public class ReadFile {
 	public void readLog(File f) throws FileNotFoundException, IOException{
 		try (BufferedReader br = new BufferedReader(new FileReader(f))) {
 		    String line;
+		    int errorCount = 10000;
 		    while ((line = br.readLine()) != null) {
+		    	errorCount++;
 		    	String[] tokens = line.split("`");
 		    	int tokenCount = tokens.length;
-		    	for (int i=0; i < tokenCount; i++){
-		    		data[i] = tokens[i].toString();
+		    	data[0] = errorCount;
+		    	for (int i=1; i <= tokenCount; i++){
+		    		data[i] = tokens[i-1].toString();
 		    	}		    	
 		    	model.addRow(data);
 		    }
