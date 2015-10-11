@@ -15,6 +15,7 @@ public class FileAnalyzer {
 	private static Logger logger;
 	ArrayList<String> content = new ArrayList<String>();
 	ArrayList<String> validTags = new ArrayList<String>();
+	String fileType;
 
 	public FileAnalyzer(File aFile) throws IOException{
 		File file = aFile;
@@ -38,6 +39,35 @@ public class FileAnalyzer {
 		}
 
 		br2.close();
+		fileType = this.getFileType();
+	}
+	
+	public String getFileType(){
+		String type = "Unknown";
+		
+		for(String line: content){
+			if (type == "Master"){
+				if(line.contains("#EXTINF")){
+					logger.error("N/A`Unable to determine file type. File contains both master and playlist tags.");
+					type = "Unknown";
+					break;
+				}
+			}
+			if (type == "Playlist"){
+				if(line.contains("#EXT-X-STREAM-INF")){
+					logger.error("N/A`Unable to determine file type. File contains both master and playlist tags.");
+					type = "Unknown";
+					break;
+				}
+			}
+			if(line.contains("#EXT-X-STREAM-INF")){
+				type = "Master";
+			}
+			else if(line.contains("#EXTINF")){
+				type = "Playlist";
+			}
+		}
+		return type;
 	}
 
 	public void checkFirstLineForTag() throws IOException{
@@ -74,7 +104,21 @@ public class FileAnalyzer {
 	public void checkDurationsAgainstTarget() throws IOException{
 		String lineText;
 		int targetDuration = -1;
-				
+		int version = -1;
+
+		if(fileType == "Playlist"){
+			for (int i=0; i < content.size(); i++){
+					lineText = content.get(i);
+					if(lineText.startsWith("#EXT-X-VERSION")){
+						if(version == -1){
+							version = Integer.parseInt(lineText.substring(lineText.indexOf(":")+1));
+						}
+						else{
+							version = 0;
+						}
+					}
+				}
+		
 		for (int i=0; i < content.size(); i++)
 		{
 			lineText = content.get(i);
@@ -103,27 +147,86 @@ public class FileAnalyzer {
 					logger.error((i+1) + "`Line specifies duration of " +  
 							Float.parseFloat((lineText.substring(lineText.indexOf(":") + 1, lineText.indexOf(",")))) + 
 							" but target duration is " + targetDuration + ". File duration may not exceed target.");
-				}		
+				}
+				
+				if(version < 3 && version > 0){
+					try{
+						Integer.parseInt((lineText.substring(lineText.indexOf(":") + 1, lineText.indexOf(","))));
+					}
+					catch(NumberFormatException e){
+						logger.error((i+1) + "`File specifies version " + version + ". All durations must be integer in this version.");
+					}					
+				}
+				if (version >= 3){
+					try{
+						int duration = -1;
+						duration = Integer.parseInt((lineText.substring(lineText.indexOf(":") + 1, lineText.indexOf(","))));
+						if(duration != -1)
+						{	
+							logger.error((i+1) + "`File specifies version " + version + ". All durations should be floating point in this version, but found integer.");
+						}
+					}
+					catch(NumberFormatException e){
+					}
+				}
 			}
+		}
 		}
 	}
 	
 	public void checkForInvalidTags() throws IOException{
 		String lineText;
+		String tag;
 		String [] tagText;
 		for (int i=0; i < content.size(); i++){
 			//check if the row contains a tag
 			lineText = content.get(i);
 			if(lineText.startsWith("#EXT")){
-				tagText = lineText.split("\\W+");
-				if(validTags.contains(tagText[1])){
-					System.out.println("Contains.");
+				if(lineText.contains(",")){
+					tag = lineText.substring(0, lineText.indexOf(","));
+				}
+				if(lineText.contains(":")){
+					tag = lineText.substring(0, lineText.indexOf(":"));
 				}
 				else{
-					System.out.println("Contains." + tagText[1]);
-					logger.error("Invalid tag. Tag "  + " is not valid per HLS spec.");
+					tag = lineText;
+				}
+				
+				if(!validTags.contains(tag)){
+					logger.error((i+1) + "`Invalid tag. Tag "  + tag + " is not valid per HLS spec.");
 				}
 			}
 		}	
-	}	
+	}
+	
+	public void checkForMissingTags(String tagName){
+		//arraylist to hold the location of each tag found
+		int tagCount = 0;
+		String lineText;
+		String tag;
+		if(fileType == "Playlist"){
+			for (int i=0; i < content.size(); i++){
+					lineText = content.get(i);
+					if(lineText.contains(",")){
+						tag = lineText.substring(0, lineText.indexOf(","));
+					}
+					if(lineText.contains(":")){
+						tag = lineText.substring(0, lineText.indexOf(":"));
+					}
+					else{
+						tag = lineText;
+					}
+			
+					if(tag.equals(tagName)){
+						tagCount++;
+					}		
+				}
+			
+			if(tagCount == 0)
+				{
+					logger.error("N/A`File contains " + tagCount + " " + tagName + 
+						" tags. Each file MUST contain this tag.");
+				}
+		}
+	}
 }

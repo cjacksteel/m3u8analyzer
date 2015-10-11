@@ -10,12 +10,12 @@ import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class LogReader {
+public class ReadFile {
 	DefaultTableModel model = new DefaultTableModel();
 	public static Logger logger;
 	private Object[] data = new Object[1000];
 	
-	public LogReader(JTable table){
+	public ReadFile(JTable table){
 		model = (DefaultTableModel)table.getModel();
 	}
 
@@ -28,6 +28,16 @@ public class LogReader {
 		    	for (int i=0; i < tokenCount; i++){
 		    		data[i] = tokens[i].toString();
 		    	}		    	
+		    	model.addRow(data);
+		    }
+		}
+	}
+	
+	public void readConf(File f) throws FileNotFoundException, IOException{
+		try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+		    String line;
+		    while ((line = br.readLine()) != null) {
+		    	data[0] = line;
 		    	model.addRow(data);
 		    }
 		}

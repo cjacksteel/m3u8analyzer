@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JEditorPane;
 
 
 public class UserInterface extends JFrame {
@@ -74,7 +75,7 @@ public class UserInterface extends JFrame {
 						FileParser p = new FileParser();
 						p.parse(p.getFileArray(ff.getRootDirectory()));
 						
-						LogReader lr = new LogReader(table);
+						ReadFile lr = new ReadFile(table);
 						lr.readLog(p.getLogfile());
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
@@ -116,6 +117,20 @@ public class UserInterface extends JFrame {
 			}
 		});
 		mnFile.add(mntmExit);
+		
+		JMenu mnEdit = new JMenu("Edit");
+		menuBar.add(mnEdit);
+		
+		JMenuItem mntmValidTags = new JMenuItem("Valid Tags");
+		mntmValidTags.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EditDialog edit = new EditDialog();
+				edit.pack();
+				edit.setLocationRelativeTo(panel);
+				edit.setVisible(true);
+			}
+		});
+		mnEdit.add(mntmValidTags);
 	}
 	
 	public void insertRow(Object[] obj){
