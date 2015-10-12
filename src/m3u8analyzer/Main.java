@@ -1,12 +1,6 @@
 package m3u8analyzer;
 
 import java.awt.EventQueue;
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import javax.swing.JFrame;
 
 public class Main {
 

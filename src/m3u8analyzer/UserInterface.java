@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,10 +18,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JEditorPane;
 
 
 public class UserInterface extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public JTextField textField;
 	private JTable table;
 	private JPanel panel;
@@ -124,9 +128,10 @@ public class UserInterface extends JFrame {
 		JMenuItem mntmValidTags = new JMenuItem("Valid Tags");
 		mntmValidTags.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EditDialog edit = new EditDialog();
-				edit.pack();
-				edit.setLocationRelativeTo(panel);
+				//EditDialog edit = new EditDialog();
+				EditInterface edit = new EditInterface();
+				//edit.pack();
+				//edit.setLocationRelativeTo(panel);
 				edit.setVisible(true);
 			}
 		});

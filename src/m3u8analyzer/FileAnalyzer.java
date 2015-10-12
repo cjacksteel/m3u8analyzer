@@ -2,13 +2,11 @@ package m3u8analyzer;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-
-import org.apache.log4j.Logger;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import org.apache.log4j.Logger;
 
 public class FileAnalyzer {
 
@@ -177,7 +175,6 @@ public class FileAnalyzer {
 	public void checkForInvalidTags() throws IOException{
 		String lineText;
 		String tag;
-		String [] tagText;
 		for (int i=0; i < content.size(); i++){
 			//check if the row contains a tag
 			lineText = content.get(i);

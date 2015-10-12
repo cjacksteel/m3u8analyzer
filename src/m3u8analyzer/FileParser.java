@@ -1,12 +1,7 @@
 package m3u8analyzer;
 import java.io.File;
 import java.io.IOException;
-import java.util.Enumeration;
 
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-
-import org.apache.log4j.Appender;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
 
